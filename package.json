@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "prettier": "prettier --write ."
+    "lint:fix": "eslint --fix ."
   },
   "dependencies": {
     "acl": "^0.4.11",
@@ -44,6 +44,8 @@
     "validator": "^12.0.0"
   },
   "devDependencies": {
+    "eslint": "^7.30.0",
+    "eslint-config-google": "^0.14.0",
     "prettier": "^2.2.1"
   }
 }

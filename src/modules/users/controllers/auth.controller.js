@@ -1,26 +1,26 @@
-"use strict";
+'use strict';
 
-const mongoose = require("mongoose"),
-  User = mongoose.model("User"),
-  jwt = require("jsonwebtoken"),
-  moment = require("moment");
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 exports.signup = async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
     const token = jwt.sign(
-      {
-        id: user._id,
-        displayName: user.displayName,
-        email: user.email,
-        roles: user.roles,
-      },
-      "help-community-secret"
+        {
+          id: user._id,
+          displayName: user.displayName,
+          email: user.email,
+          roles: user.roles,
+        },
+        'help-community-secret',
     );
-    return res.jsonp({ token, expiry: moment().add(2, "days").unix() });
+    return res.jsonp({token, expiry: moment().add(2, 'days').unix()});
   } catch (e) {
-    return res.status(400).send({ message: e.message });
+    return res.status(400).send({message: e.message});
   }
 };
 
@@ -31,26 +31,26 @@ exports.signin = async (req, res) => {
       email: req.body.email,
     });
     if (user) {
-      var authenticated = user.authenticate(req.body.password);
+      const authenticated = user.authenticate(req.body.password);
       if (authenticated) {
-        //Generate a webtoken
+        // Generate a webtoken
         const token = jwt.sign(
-          {
-            id: user._id,
-            displayName: user.displayName,
-            email: user.email,
-            roles: user.roles,
-          },
-          "help-community-secret"
+            {
+              id: user._id,
+              displayName: user.displayName,
+              email: user.email,
+              roles: user.roles,
+            },
+            'help-community-secret',
         );
-        res.jsonp({ token: jwt, expiry: moment().add(2, "days").unix() });
+        res.jsonp({token, expiry: moment().add(2, 'days').unix()});
       } else {
-        res.status(400).send({ message: "Wrong password" });
+        res.status(400).send({message: 'Wrong password'});
       }
     } else {
-      res.status(400).send({ message: "User does not exist" });
+      res.status(400).send({message: 'User does not exist'});
     }
   } catch (e) {
-    res.status(400).send({ message: e.message });
+    res.status(400).send({message: e.message});
   }
 };
