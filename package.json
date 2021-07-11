@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "lint:fix": "eslint --fix ."
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
   "dependencies": {
     "acl": "^0.4.11",
@@ -45,9 +47,10 @@
     "twilio": "^3.45.0",
     "validator": "^12.0.0"
   },
+  "pre-commit": [ "precommit-msg", "lint" ],
   "devDependencies": {
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",
-    "prettier": "^2.2.1"
+    "pre-commit": "^1.2.2"
   }
 }
