@@ -81,5 +81,3 @@ connection.on;
 
 module.exports = app;
 
-// swagger
-// refresh token
