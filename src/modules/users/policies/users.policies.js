@@ -6,7 +6,7 @@ const {
   handle401,
   handle500,
   handle403,
-} = require('../../../utils/responses);
+} = require('../../../utils/responses');
 
 // eslint-disable-next-line new-cap
 acl = new acl(new acl.memoryBackend());
