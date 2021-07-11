@@ -2,8 +2,14 @@
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const jwt = require('jsonwebtoken');
 const moment = require('moment');
+const jwt = require('jsonwebtoken');
+const {
+  handle404,
+  handle200,
+  handle401,
+  handle500,
+} = require('../../../utils/responses');
 
 exports.signup = async (req, res) => {
   try {
@@ -17,10 +23,11 @@ exports.signup = async (req, res) => {
           roles: user.roles,
         },
         'help-community-secret',
+        {expiresIn: '2 days'},
     );
-    return res.jsonp({token, expiry: moment().add(2, 'days').unix()});
+    handle200(res, {token, expiry: moment().add(2, 'days').unix()});
   } catch (e) {
-    return res.status(400).send({message: e.message});
+    return handle500(res);
   }
 };
 
@@ -30,27 +37,21 @@ exports.signin = async (req, res) => {
       active: true,
       email: req.body.email,
     });
-    if (user) {
-      const authenticated = user.authenticate(req.body.password);
-      if (authenticated) {
-        // Generate a webtoken
-        const token = jwt.sign(
-            {
-              id: user._id,
-              displayName: user.displayName,
-              email: user.email,
-              roles: user.roles,
-            },
-            'help-community-secret',
-        );
-        res.jsonp({token, expiry: moment().add(2, 'days').unix()});
-      } else {
-        res.status(400).send({message: 'Wrong password'});
-      }
-    } else {
-      res.status(400).send({message: 'User does not exist'});
-    }
+    if (!user) return handle404(res);
+    const authenticated = user.authenticate(req.body.password);
+    if (!authenticated) return handle401(res);
+    const token = jwt.sign(
+        {
+          id: user._id,
+          displayName: user.displayName,
+          email: user.email,
+          roles: user.roles,
+        },
+        'help-community-secret',
+        {expiresIn: '2 days'},
+    );
+    handle200(res, {token, expiry: moment().add(2, 'days').unix()});
   } catch (e) {
-    res.status(400).send({message: e.message});
+    return handle500(res);
   }
 };

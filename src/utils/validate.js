@@ -1,11 +1,9 @@
 const {validationResult} = require('express-validator');
+const {handle422} = require('../utils/responses');
 exports.validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json({
-      status: 'failed',
-      errors: errors.array(),
-    });
+    return handle422(res, errors.array());
   }
   next();
 };

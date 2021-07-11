@@ -9,11 +9,11 @@ const crypto = require('crypto');
 const validator = require('validator');
 const generatePassword = require('generate-password');
 
-const validateLocalStrategyProperty = (property) => {
+const validateLocalStrategyProperty = function(property) {
   return property.length;
 };
 
-const validateLocalStrategyEmail = (email) => {
+const validateLocalStrategyEmail = function(email) {
   return validator.isEmail(email, {require_tld: false});
 };
 
@@ -110,7 +110,7 @@ const UserSchema = new Schema(
 /**
  * Hook a pre save method to hash the password
  */
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function(next) {
   if (this.password && this.isModified('password')) {
     this.salt = crypto.randomBytes(16).toString('base64');
     this.password = this.hashPassword(this.password);
@@ -123,27 +123,29 @@ UserSchema.pre('save', (next) => {
 /**
  * Hook a pre validate method to test the local password
  */
-UserSchema.pre('validate', (next) => {
+UserSchema.pre('validate', function(next) {
   next();
 });
 
-UserSchema.methods.hashPassword = (password) => {
+UserSchema.methods.authenticate = function(password) {
+  return this.password === this.hashPassword(password);
+};
+
+UserSchema.methods.hashPassword = function(password) {
   if (this.salt && password) {
     return crypto
         .pbkdf2Sync(
             password,
-            new Buffer(this.salt, 'base64'), 10000, 64, 'SHA1')
+            // eslint-disable-next-line new-cap
+            new Buffer.alloc(512, this.salt, 'base64'), 10000, 64, 'SHA1')
         .toString('base64');
   } else {
     return password;
   }
 };
 
-UserSchema.methods.authenticate = (password) => {
-  return this.password === this.hashPassword(password);
-};
 
-UserSchema.methods.toJSON = () => {
+UserSchema.methods.toJSON = function() {
   return {
     _id: this._id,
     firstName: this.firstName,
@@ -155,7 +157,7 @@ UserSchema.methods.toJSON = () => {
   };
 };
 
-UserSchema.statics.generateRandomPassphrase = () => {
+UserSchema.statics.generateRandomPassphrase = function() {
   return new Promise(function(resolve, reject) {
     let password = '';
     const repeatingCharacters = new RegExp('(.)\\1{2,}', 'g');
