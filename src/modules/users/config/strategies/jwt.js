@@ -6,6 +6,8 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('mongoose').model('User');
+const fs = require('fs');
+const publicKey = fs.readFileSync('./keys/public.key', 'utf8');
 
 module.exports = () => {
   const opts = {};
@@ -13,7 +15,8 @@ module.exports = () => {
     ExtractJwt.fromAuthHeaderAsBearerToken(),
     ExtractJwt.fromUrlQueryParameter('token'),
   ]);
-  opts.secretOrKey = 'help-community-secret';
+  opts.secretOrKey = publicKey;
+  opts.algorithms = ['RS256'];
 
   return new JwtStrategy(opts, (jwtPayload, done) => {
     User.findOne({_id: jwtPayload.id}, '-password -salt', (err, user) => {

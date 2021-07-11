@@ -6,13 +6,20 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const util = require('./global-utils');
 const cors = require('cors');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const {swaggerDefinition} = require('./swagger-definition');
 require('dotenv').config();
 
 const allRoutes = util.getGlobbedPaths(util.assets.routes);
 const allPolicies = util.getGlobbedPaths(util.assets.policies);
 const allModels = util.getGlobbedPaths(util.assets.models);
 const allConfigs = util.getGlobbedPaths(util.assets.configs);
-
+const swaggerOptions = {
+  swaggerDefinition,
+  apis: util.assets.controllers,
+};
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
 const app = express();
 app.use(cors());
 // view engine setup
@@ -26,6 +33,7 @@ app.use(express.urlencoded({extended: false}));
 
 app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 allPolicies.forEach((element) => {
   require(element).invokeRolesPolicies();

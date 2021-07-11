@@ -66,3 +66,7 @@ mongod
 # enviroment
 # =========
 .env
+
+# certificate key
+# =========
+keys

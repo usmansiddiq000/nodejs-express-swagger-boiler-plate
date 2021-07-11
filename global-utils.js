@@ -51,4 +51,5 @@ exports.assets = {
   models: ['./src/modules/*/models/**/*.js'],
   configs: ['./src/modules/*/config/**/*.config.js'],
   sockets: ['./src/modules/*/sockets/**/*.js'],
+  controllers: ['./src/modules/*/controllers/**/*.js'],
 };

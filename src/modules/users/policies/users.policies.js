@@ -21,6 +21,10 @@ exports.invokeRolesPolicies = () => {
           resources: '/api/user',
           permissions: '*',
         },
+        {
+          resources: '/api/users',
+          permissions: '*',
+        },
       ],
     },
   ]);
