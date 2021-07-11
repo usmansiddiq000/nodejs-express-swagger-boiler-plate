@@ -105,6 +105,7 @@
     "generator-star-spacing": ["error", "after"],
     "no-new-symbol": "error",
     "no-this-before-super": "error",
+    "no-invalid-this": "error",
     "no-var": "error",
     "prefer-const": ["error", {"destructuring": "all"}],
     "prefer-rest-params": "error",

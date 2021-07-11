@@ -1,3 +1,5 @@
+'use strict';
+
 const authController = require('../controllers/auth.controller');
 const {validationSchema} = require('../validators/auth.validator');
 const {validate} = require('../../../utils/validate');

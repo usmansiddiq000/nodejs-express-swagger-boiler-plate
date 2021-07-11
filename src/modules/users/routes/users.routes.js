@@ -1,3 +1,5 @@
+'use strict';
+
 const userPolicies = require('../policies/users.policies');
 const userController = require('../controllers/user.controller');
 
