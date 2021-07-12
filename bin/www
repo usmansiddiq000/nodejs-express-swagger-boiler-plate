@@ -15,6 +15,7 @@ const socketio = require('socket.io');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const util = require('../global-utils');
+const fs = require('fs');
 const publicKey = fs.readFileSync('./keys/public.key', 'utf8');
 
 const sockets = util.getGlobbedPaths(util.assets.sockets);
