@@ -15,6 +15,7 @@ const socketio = require('socket.io');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const util = require('../global-utils');
+const publicKey = fs.readFileSync('./keys/public.key', 'utf8');
 
 const sockets = util.getGlobbedPaths(util.assets.sockets);
 
@@ -40,7 +41,8 @@ io.use(async function(socket, next) {
       // if the user is authenticated
       const decoded = jwt.verify(
           socket.handshake.query.token,
-          'help-community-secret');
+          publicKey,
+      );
       const user = await User.findById(decoded.id, '-password -salt');
       user.onlineStatus = {
         status: 'online',
