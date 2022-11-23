@@ -47,7 +47,10 @@
     "twilio": "^3.45.0",
     "validator": "^12.0.0"
   },
-  "pre-commit": [ "precommit-msg", "lint" ],
+  "pre-commit": [
+    "precommit-msg",
+    "lint"
+  ],
   "devDependencies": {
     "eslint": "^7.30.0",
     "eslint-config-google": "^0.14.0",

@@ -15,7 +15,7 @@ const {
 
 /**
  * @swagger
- *  /api/signup:
+ *  /api/auth/signup:
  *    post:
  *      tags:
  *        - Auth
@@ -34,7 +34,7 @@ const {
  *                  type: string
  *                  description: user first name
  *                  example: jhon
- *                lastname:
+ *                lastName:
  *                  type: string
  *                  description: user first name
  *                  example: doe
@@ -90,7 +90,7 @@ exports.signup = async (req, res) => {
 
 /**
  * @swagger
- *  /api/signin:
+ *  /api/auth/signin:
  *    post:
  *      tags:
  *        - Auth
